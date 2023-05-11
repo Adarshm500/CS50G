@@ -60,8 +60,15 @@ function PlayState:enter(params)
     -- grab level # from the params we're passed
     self.level = params.level
 
-    -- spawn a board and place it toward the right
-    self.board = params.board or Board(VIRTUAL_WIDTH - 272, 16)
+    -- if the level is 1 then spawn only plain tiles
+    if self.level == 1 then
+        print("run")
+        self.board = Board(VIRTUAL_WIDTH - 272, 16, 1)
+    else
+        print("run2")
+        -- spawn a board and place it toward the right
+        self.board = params.board or Board(VIRTUAL_WIDTH - 272, 16)
+    end
 
     -- grab score from params if it was passed
     self.score = params.score or 0
@@ -195,8 +202,8 @@ function PlayState:calculateMatches()
 
         -- add score for each match
         for k, match in pairs(matches) do
-            self.score = self.score + #match * 50
-            self.timer = self.timer + 1
+            self.score = self.score + #match * 500
+            self.timer = self.timer + 10
         end
 
         -- remove any tiles that matched from the board, making empty spaces

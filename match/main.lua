@@ -61,8 +61,8 @@ function love.load()
     })
 
     -- set music to loop and start
-    gSounds['music']:setLooping(true)
-    gSounds['music']:play()
+    -- gSounds['music']:setLooping(true)
+    -- gSounds['music']:play()
 
     -- initialize state machine with all state-returning functions
     gStateMachine = StateMachine {
