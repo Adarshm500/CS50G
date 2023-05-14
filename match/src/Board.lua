@@ -80,7 +80,7 @@ function Board:calculateMatches()
                 if matchNum >= 3 then
                     local match = {}
 
-                    -- if we have te shiny tile then the whole row should be cleared
+                    -- if we have the shiny tile then the whole row should be cleared
                     local shinyTile
                     if self.tiles[y][x - 1].shiny == true then
                         shinyTile = true 
@@ -176,10 +176,35 @@ function Board:calculateMatches()
                 if matchNum >= 3 then
                     local match = {}
 
-                    for y2 = y - 1, y - matchNum, -1 do
-                        table.insert(match, self.tiles[y2][x])
+                    -- if we have the shiny tile then the whole column should be cleared
+                    local shinyTile
+                    if self.tiles[y - 1][x].shiny == true then
+                        shinyTile = true 
                     end
 
+                    for i = y - 1, y - matchNum, -1 do
+                        print("clr2"..self.tiles[i][x].variety)
+                        if self.tiles[i][x].shiny == false then
+                            shinyTile = false
+                        end
+                    end
+                    
+                    if shinyTile then
+                        -- put the whole row in the Match
+                        for y3 = 1, 8 do 
+                            -- add the whole row to match
+                            print("color"..self.tiles[y3][x].color.."variety"..self.tiles[y3][x].variety)
+                            table.insert(match, self.tiles[y3][x])
+                        end
+                        print("end")
+                    else
+
+                        for y2 = y - 1, y - matchNum, -1 do
+                            table.insert(match, self.tiles[y2][x])
+                        end
+                    end
+                    shinyTile = false
+                    
                     table.insert(matches, match)
                 end
 
@@ -195,10 +220,34 @@ function Board:calculateMatches()
         -- account for the last column ending with a match
         if matchNum >= 3 then
             local match = {}
+
+             -- if we have te shiny tile then the whole row should be cleared
+            local shinyTile
+            if self.tiles[8][x].shiny == true then
+                shinyTile = true 
+            end
+
+            for y = 8, 8 - matchNum + 1, -1 do
+                print("clr"..self.tiles[y][x].variety)
+                if self.tiles[y][x].shiny == false then
+                    shinyTile = false
+                end
+            end
+            
+            if shinyTile then
+                -- put the whole row in the Match
+                for y3 = 1, 8 do 
+                    -- add the whole row to match
+                    print("color"..self.tiles[y3][x].color.."variety"..self.tiles[y3][x].variety)
+                    table.insert(match, self.tiles[y3][x])
+                end
+                print("end")
+            else
             
             -- go backwards from end of last row by matchNum
-            for y = 8, 8 - matchNum + 1, -1 do
-                table.insert(match, self.tiles[y][x])
+                for y = 8, 8 - matchNum + 1, -1 do
+                    table.insert(match, self.tiles[y][x])
+                end
             end
 
             table.insert(matches, match)
