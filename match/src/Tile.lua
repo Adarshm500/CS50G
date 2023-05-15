@@ -26,11 +26,11 @@ function Tile:init(x, y, color, variety)
     -- tile appearance/points
     self.color = color
     self.variety = variety
-    if self.variety == 1 then
-        self.shiny = true
-    else 
-        self.shiny = false
-    end
+    -- if self.variety == 1 then
+    --     self.shiny = true
+    -- else 
+    --     self.shiny = false
+    -- end
     
 end
 

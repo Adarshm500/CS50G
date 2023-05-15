@@ -82,18 +82,19 @@ function Board:calculateMatches()
 
                     -- if we have the shiny tile then the whole row should be cleared
                     local shinyTile
-                    if self.tiles[y][x - 1].shiny == true then
-                        shinyTile = true 
-                    end
+                    shinyTile = self.tiles[y][x - 1].variety 
+                    print("shinyTile"..shinyTile)
 
                     for i = x - 1,x - matchNum, -1 do
                         print("clr"..self.tiles[y][i].variety)
-                        if self.tiles[y][i].shiny == false then
-                            shinyTile = false
+                        print(self.tiles[y][i].variety.."and"..shinyTile)
+                        if not (self.tiles[y][i].variety == shinyTile) then
+                            print("rn")
+                            shinyTile = 0
                         end
                     end
                     
-                    if shinyTile then
+                    if shinyTile ~= 0 then
                         -- put the whole row in the Match
                         for x3 = 1, 8 do 
                             -- add the whole row to match
@@ -109,7 +110,7 @@ function Board:calculateMatches()
                             table.insert(match, self.tiles[y][x2])
                         end
                     end
-                    shinyTile = false
+                    shinyTile = 0
                     -- add this match to our total matches table
                     table.insert(matches, match)
                 end
@@ -131,18 +132,16 @@ function Board:calculateMatches()
 
             -- if we have te shiny tile then the whole row should be cleared
             local shinyTile
-            if self.tiles[y][8].shiny == true then
-                shinyTile = true 
-            end
+            shinyTile = self.tiles[y][8].variety
 
             for x = 8, 8 - matchNum + 1, -1 do
                 print("clr"..self.tiles[y][x].variety)
-                if self.tiles[y][x].shiny == false then
-                    shinyTile = false
+                if not (self.tiles[y][x].variety == shinyTile) then
+                    shinyTile = 0
                 end
             end
             
-            if shinyTile then
+            if shinyTile ~= 0 then
                 -- put the whole row in the Match
                 for x3 = 1, 8 do 
                     -- add the whole row to match
@@ -178,18 +177,16 @@ function Board:calculateMatches()
 
                     -- if we have the shiny tile then the whole column should be cleared
                     local shinyTile
-                    if self.tiles[y - 1][x].shiny == true then
-                        shinyTile = true 
-                    end
+                    shinyTile = self.tiles[y - 1][x].variety
 
                     for i = y - 1, y - matchNum, -1 do
                         print("clr2"..self.tiles[i][x].variety)
-                        if self.tiles[i][x].shiny == false then
-                            shinyTile = false
+                        if not (self.tiles[i][x].variety == shinyTile) then
+                            shinyTile = 0
                         end
                     end
                     
-                    if shinyTile then
+                    if shinyTile ~= 0 then
                         -- put the whole row in the Match
                         for y3 = 1, 8 do 
                             -- add the whole row to match
@@ -203,7 +200,7 @@ function Board:calculateMatches()
                             table.insert(match, self.tiles[y2][x])
                         end
                     end
-                    shinyTile = false
+                    shinyTile = 0
                     
                     table.insert(matches, match)
                 end
@@ -223,18 +220,16 @@ function Board:calculateMatches()
 
              -- if we have te shiny tile then the whole row should be cleared
             local shinyTile
-            if self.tiles[8][x].shiny == true then
-                shinyTile = true 
-            end
+            shinyTile = self.tiles[8][x].variety
 
             for y = 8, 8 - matchNum + 1, -1 do
                 print("clr"..self.tiles[y][x].variety)
-                if self.tiles[y][x].shiny == false then
-                    shinyTile = false
+                if not (self.tiles[y][x].variety == shinyTile) then
+                    shinyTile = 0
                 end
             end
             
-            if shinyTile then
+            if shinyTile ~= 0 then
                 -- put the whole row in the Match
                 for y3 = 1, 8 do 
                     -- add the whole row to match
