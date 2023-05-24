@@ -159,6 +159,9 @@ function PlayState:update(dt)
                 newTile.gridX = tempX
                 newTile.gridY = tempY
 
+                -- Save the old highlighted tile to swap later
+                oldhighlightedTile = newTile
+
                 -- swap tiles in the tiles table
                 self.board.tiles[self.highlightedTile.gridY][self.highlightedTile.gridX] =
                     self.highlightedTile
@@ -166,7 +169,7 @@ function PlayState:update(dt)
                 self.board.tiles[newTile.gridY][newTile.gridX] = newTile
 
                 -- tween coordinates between the two so they swap
-                Timer.tween(0.1, {
+                Timer.tween(5, {
                     [self.highlightedTile] = {x = newTile.x, y = newTile.y},
                     [newTile] = {x = self.highlightedTile.x, y = self.highlightedTile.y}
                 })
@@ -175,6 +178,39 @@ function PlayState:update(dt)
                 :finish(function()
                     self:calculateMatches()
                 end)
+                -- check for a match
+                if not self.board:calculateMatches() then
+                    -- if no match then revert back
+
+                    -- the current tile
+                    local currentTile = self.board.tiles[y][x]
+
+                    -- swap grid positions of tiles
+                    local tempX = currentTile.gridX
+                    local tempY = currentTile.gridY
+
+                    currentTile.gridX = oldhighlightedTile.gridX
+                    currentTile.gridY = oldhighlightedTile.gridY
+                    oldhighlightedTile.gridX = tempX
+                    oldhighlightedTile.gridY = tempY
+
+                    -- swap tiles in the tiles table
+                    self.board.tiles[currentTile.gridY][currentTile.gridX] = currentTile
+
+                    print("revert")
+                    self.board.tiles[oldhighlightedTile.gridY][oldhighlightedTile.gridX] = oldhighlightedTile
+
+                    -- tween coordinates between the two so they swap
+                    Timer.tween(7, {
+                        [currentTile] = {x = oldhighlightedTile.x, y = oldhighlightedTile.y},
+                        [oldhighlightedTile] = {x = currentTile.x, y = currentTile.y}
+                    })
+
+                    -- once the revert is finished, we can tween falling blocks as needed
+                    :finish(function()
+                        self:calculateMatches()
+                    end)
+                end
             end
         end
     end
