@@ -215,6 +215,7 @@ function PlayState:revert()
         self.board.tiles[oldTile.gridY][oldTile.gridX] = oldTile
         
         self.board.tiles[oldhighlightedTile.gridY][oldhighlightedTile.gridX] = oldhighlightedTile
+
         print("revert")
         print("after:oldtile"..oldTile.gridX)
         print("after:current"..oldhighlightedTile.gridX)
@@ -272,10 +273,61 @@ function PlayState:calculateMatches()
             -- as a result of falling blocks once new blocks have finished falling
             self:calculateMatches()
         end)
-    
-    -- if no matches, we can continue playing
+
+        
+        -- if no matches, we can continue playing
     else
         self.canInput = true
+    end
+    -- check if there are potential matches for player to be able to play the game
+    -- if there are no matches available to perform then reset the board
+    -- we start with the first tile and then move forward
+    noMatch = true
+    for b = 1, 8 do
+        for a = 1, 8 do
+            -- swap the current tile with +1 on the y axis and then +1 on the x axis
+            
+            --swap with +1 on y axis
+            local tile1 = self.board.tiles[b][a]
+            local tempX = tile1.gridX
+            local tempY = tile1.gridY
+
+            oldTile1 = tile1
+
+            local tile2 = self.board.tiles[b + 1][a]
+
+            tile1.gridX = tile2.gridX
+            tile1.gridY = tile2.gridY
+            tile2.gridX = tempX
+            tile2.gridY = tempY
+
+            oldTile2 = tile2
+
+            -- swap tiles in the tiles table
+            self.board.tiles[tile1.gridY][tile1.gridX] = self.tile2
+
+            self.board.tiles[tile2.gridY][tile2.gridX] = self.tile1
+
+            if self.board:calculateMatches() then
+                noMatch = false
+            end
+
+            -- revert the tiles back
+            local tempX = oldTile2.gridX
+            local tempX = oldTile2.gridY
+
+            oldTile2.gridX = oldTile1.gridX
+            oldTile2.gridY = oldTile1.gridY
+
+            oldTile1.gridX = tempX
+            oldTile1.gridX = tempY
+
+            -- swap tile in the tiles table
+            self.board.tiles[oldTile2.gridY][oldTile2.gridX] = oldTile2
+
+            self.board.tiles[oldTile1.gridY][oldTile1.gridX] = oldTile1
+            print(noMatch)
+        end
     end
 end
 
