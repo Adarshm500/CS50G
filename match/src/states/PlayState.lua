@@ -159,8 +159,8 @@ function PlayState:update(dt)
                 newTile.gridX = tempX
                 newTile.gridY = tempY
 
-                -- Save the old highlighted tile to swap later
-                oldhighlightedTile = newTile
+                -- Save the newTile to swap later
+                oldTile = newTile
 
                 -- swap tiles in the tiles table
                 self.board.tiles[self.highlightedTile.gridY][self.highlightedTile.gridX] =
@@ -180,30 +180,33 @@ function PlayState:update(dt)
                 end)
                 -- check for a match
                 if not self.board:calculateMatches() then
-                    -- if no match then revert back
+                -- if no match then revert back
 
-                    -- the current tile
+                -- the current tile
                     local currentTile = self.board.tiles[y][x]
+                    print("oldtile"..oldTile.gridX)
+                    print("current"..currentTile.gridX)
 
                     -- swap grid positions of tiles
-                    local tempX = currentTile.gridX
-                    local tempY = currentTile.gridY
+                    local tempX = oldTile.gridX
+                    local tempY = oldTile.gridY
 
-                    currentTile.gridX = oldhighlightedTile.gridX
-                    currentTile.gridY = oldhighlightedTile.gridY
-                    oldhighlightedTile.gridX = tempX
-                    oldhighlightedTile.gridY = tempY
+                    oldTile.gridX = currentTile.gridX
+                    oldTile.gridY = currentTile.gridY
+
+                    currentTile.gridX = tempX
+                    currentTile.gridY = tempY
 
                     -- swap tiles in the tiles table
+                    self.board.tiles[oldTile.gridY][oldTile.gridX] = oldTile
+                    
                     self.board.tiles[currentTile.gridY][currentTile.gridX] = currentTile
-
                     print("revert")
-                    self.board.tiles[oldhighlightedTile.gridY][oldhighlightedTile.gridX] = oldhighlightedTile
-
+                    
                     -- tween coordinates between the two so they swap
                     Timer.tween(7, {
-                        [currentTile] = {x = oldhighlightedTile.x, y = oldhighlightedTile.y},
-                        [oldhighlightedTile] = {x = currentTile.x, y = currentTile.y}
+                        [oldTile] = {x = currentTile.x, y = currentTile.y},
+                        [currentTile] = {x = oldTile.x, y = oldTile.y}
                     })
 
                     -- once the revert is finished, we can tween falling blocks as needed
