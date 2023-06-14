@@ -55,6 +55,7 @@ end
 ]]
 function Board:calculateMatches()
     local matches = {}
+    print("checking..................")
 
     -- how many of the same color blocks in a row we've found
     local matchNum = 1
@@ -83,13 +84,9 @@ function Board:calculateMatches()
                     -- if we have the shiny tile then the whole row should be cleared
                     local shinyTile
                     shinyTile = self.tiles[y][x - 1].variety 
-                    print("shinyTile"..shinyTile)
 
                     for i = x - 1,x - matchNum, -1 do
-                        print("clr"..self.tiles[y][i].variety)
-                        print(self.tiles[y][i].variety.."and"..shinyTile)
                         if not (self.tiles[y][i].variety == shinyTile) then
-                            print("rn")
                             shinyTile = 0
                         end
                     end
@@ -98,10 +95,8 @@ function Board:calculateMatches()
                         -- put the whole row in the Match
                         for x3 = 1, 8 do 
                             -- add the whole row to match
-                            print("color"..self.tiles[y][x3].color.."variety"..self.tiles[y][x3].variety)
                             table.insert(match, self.tiles[y][x3])
                         end
-                        print("end")
                     else
                         -- go backwards from here by matchNum
                         for x2 = x - 1, x - matchNum, -1 do
@@ -135,7 +130,6 @@ function Board:calculateMatches()
             shinyTile = self.tiles[y][8].variety
 
             for x = 8, 8 - matchNum + 1, -1 do
-                print("clr"..self.tiles[y][x].variety)
                 if not (self.tiles[y][x].variety == shinyTile) then
                     shinyTile = 0
                 end
@@ -145,10 +139,8 @@ function Board:calculateMatches()
                 -- put the whole row in the Match
                 for x3 = 1, 8 do 
                     -- add the whole row to match
-                    print("color"..self.tiles[y][x3].color.."variety"..self.tiles[y][x3].variety)
                     table.insert(match, self.tiles[y][x3])
                 end
-                print("end")
             else
 
                 for x = 8, 8 - matchNum + 1, -1 do
@@ -180,7 +172,6 @@ function Board:calculateMatches()
                     shinyTile = self.tiles[y - 1][x].variety
 
                     for i = y - 1, y - matchNum, -1 do
-                        print("clr2"..self.tiles[i][x].variety)
                         if not (self.tiles[i][x].variety == shinyTile) then
                             shinyTile = 0
                         end
@@ -190,10 +181,8 @@ function Board:calculateMatches()
                         -- put the whole row in the Match
                         for y3 = 1, 8 do 
                             -- add the whole row to match
-                            print("color"..self.tiles[y3][x].color.."variety"..self.tiles[y3][x].variety)
                             table.insert(match, self.tiles[y3][x])
                         end
-                        print("end")
                     else
 
                         for y2 = y - 1, y - matchNum, -1 do
@@ -223,7 +212,6 @@ function Board:calculateMatches()
             shinyTile = self.tiles[8][x].variety
 
             for y = 8, 8 - matchNum + 1, -1 do
-                print("clr"..self.tiles[y][x].variety)
                 if not (self.tiles[y][x].variety == shinyTile) then
                     shinyTile = 0
                 end
@@ -233,10 +221,8 @@ function Board:calculateMatches()
                 -- put the whole row in the Match
                 for y3 = 1, 8 do 
                     -- add the whole row to match
-                    print("color"..self.tiles[y3][x].color.."variety"..self.tiles[y3][x].variety)
                     table.insert(match, self.tiles[y3][x])
                 end
-                print("end")
             else
             
             -- go backwards from end of last row by matchNum
