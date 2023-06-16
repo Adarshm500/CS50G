@@ -152,7 +152,7 @@ function PlayState:update(dt)
                 local tempX = self.highlightedTile.gridX
                 local tempY = self.highlightedTile.gridY
                 -- save oldhighlightedtile
-                local oldhighlightedTile = self.highlightedTile
+                oldhighlightedTile = self.highlightedTile
 
                 local newTile = self.board.tiles[y][x]
 
@@ -162,16 +162,13 @@ function PlayState:update(dt)
                 newTile.gridY = tempY
 
                 -- Save the newTile to swap later
-                local oldTile = newTile
+                oldTile = newTile
 
                 -- swap tiles in the tiles table
                 self.board.tiles[self.highlightedTile.gridY][self.highlightedTile.gridX] =
                     self.highlightedTile
 
                 self.board.tiles[newTile.gridY][newTile.gridX] = newTile
-
-                -- Should we tween if revert?
-                local doTween = true
 
                 -- tween coordinates between the two so they swap
                 Timer.tween(0.1, {
@@ -185,7 +182,7 @@ function PlayState:update(dt)
                 end)
                 -- check if a match is found
                 :finish(function()
-                    self:revert(oldTile, oldhighlightedTile,doTween)
+                    self:revert()
                 end)
             end
         end
@@ -195,7 +192,7 @@ function PlayState:update(dt)
 end
 
 -- function to revert the tiles back if no match is found
-function PlayState:revert(oldTile, oldhighlightedTile,doTween)
+function PlayState:revert()
      -- check for a match
     if not self.board:calculateMatches() then
     -- if no match then revert back
@@ -224,16 +221,15 @@ function PlayState:revert(oldTile, oldhighlightedTile,doTween)
         -- print("after:current"..oldhighlightedTile.gridX)
         
         -- tween coordinates between the two so they swap
-        if doTween == true then
-            Timer.tween(0.1, {
-                [oldTile] = {x = oldhighlightedTile.x, y = oldhighlightedTile.y},
-                [oldhighlightedTile] = {x = oldTile.x, y = oldTile.y}
-            })
-            -- once the revert is finished, we can tween falling blocks as needed
-            :finish(function()
-                self:calculateMatches()
-            end)
-        end
+        Timer.tween(0.1, {
+            [oldTile] = {x = oldhighlightedTile.x, y = oldhighlightedTile.y},
+            [oldhighlightedTile] = {x = oldTile.x, y = oldTile.y}
+        })
+
+        -- once the revert is finished, we can tween falling blocks as needed
+        :finish(function()
+            self:calculateMatches()
+        end)
     else
         -- if match found then calculateMatches
         self:calculateMatches()
@@ -296,31 +292,27 @@ function PlayState:calculateMatches()
             local tile1 = self.board.tiles[b][a]
             local oldTile1 = tile1
             print("tile1 "..tile1.gridX..","..tile1.gridY)
-            print(tile1.color)
-
             local tempX = tile1.gridX
             local tempY = tile1.gridY
 
 
             local tile2 = self.board.tiles[b + 1][a]
-            print("tile2. "..tile2.gridX..","..tile2.gridY)
-            print(tile2.color)
-            
+            local oldTile2 = tile2
+            print("tile2 "..tile2.gridX..","..tile2.gridY)
+
             tile1.gridX = tile2.gridX
             tile1.gridY = tile2.gridY
             tile2.gridX = tempX
             tile2.gridY = tempY
-            
-            -- save the new tile to swap back
-            local oldTile2 = tile2
+
 
             -- swap tiles in the tiles table
-            self.board.tiles[tile1.gridY][tile1.gridX] = tile1
+            self.board.tiles[tile1.gridY][tile1.gridX] = tile2
 
-            self.board.tiles[tile2.gridY][tile2.gridX] = tile2
+            self.board.tiles[tile2.gridY][tile2.gridX] = tile1
 
-            -- print("swappedtile1 "..tile1.gridX..","..tile1.gridY)
-            -- print("swappedtile2 "..tile2.gridX..","..tile2.gridY)
+            print("swappedtile1 "..tile1.gridX..","..tile1.gridY)
+            print("swappedtile2 "..tile2.gridX..","..tile2.gridY)
             -- print(oldTile1.gridX..","..oldTile1.gridY)
             -- print(oldTile2.gridX..","..oldTile2.gridY)
 
@@ -328,22 +320,22 @@ function PlayState:calculateMatches()
                 noMatch = false
             end
 
-            -- -- revert the tiles back
-            -- local tempX = oldTile1.gridX
-            -- local tempY = oldTile1.gridY
+            -- revert the tiles back
+            local tempX = oldTile1.gridX
+            local tempY = oldTile1.gridY
 
-            -- oldTile1.gridX = oldTile2.gridX
-            -- oldTile1.gridY = oldTile2.gridY
+            oldTile1.gridX = oldTile2.gridX
+            oldTile1.gridY = oldTile2.gridY
 
-            -- oldTile2.gridX = tempX
-            -- oldTile2.gridY = tempY
+            oldTile2.gridX = tempX
+            oldTile2.gridY = tempY
 
-            -- --swap the tiles in the tiles table
-            -- self.board.tiles[oldTile1.gridY][oldTile1.gridX] = oldTile1
+            --swap the tiles in the tiles table
+            self.board.tiles[oldTile1.gridY][oldTile1.gridX] = oldTile1
 
-            -- self.board.tiles[oldTile2.gridY][oldTile2.gridX] = oldTile2
+            self.board.tiles[oldTile2.gridY][oldTile2.gridX] = oldTile2
 
-            -- print(noMatch)
+            print(noMatch)
             -- print("reverttile1 "..oldTile1.gridX..","..oldTile1.gridY)
             -- print("reverttile2 "..oldTile2.gridX..","..oldTile2.gridY)
         end
