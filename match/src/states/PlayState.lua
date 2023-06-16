@@ -302,29 +302,31 @@ function PlayState:calculateMatches()
             local tempY = tile1.gridY
 
 
-            -- local tile2 = self.board.tiles[b + 1][a]
-            -- local oldTile2 = tile2
-            -- print("tile2 "..tile2.gridX..","..tile2.gridY)
+            local tile2 = self.board.tiles[b + 1][a]
+            print("tile2. "..tile2.gridX..","..tile2.gridY)
+            print(tile2.color)
+            
+            tile1.gridX = tile2.gridX
+            tile1.gridY = tile2.gridY
+            tile2.gridX = tempX
+            tile2.gridY = tempY
+            
+            -- save the new tile to swap back
+            local oldTile2 = tile2
 
-            -- tile1.gridX = tile2.gridX
-            -- tile1.gridY = tile2.gridY
-            -- tile2.gridX = tempX
-            -- tile2.gridY = tempY
+            -- swap tiles in the tiles table
+            self.board.tiles[tile1.gridY][tile1.gridX] = tile1
 
-
-            -- -- swap tiles in the tiles table
-            -- self.board.tiles[tile1.gridY][tile1.gridX] = tile2
-
-            -- self.board.tiles[tile2.gridY][tile2.gridX] = tile1
+            self.board.tiles[tile2.gridY][tile2.gridX] = tile2
 
             -- print("swappedtile1 "..tile1.gridX..","..tile1.gridY)
             -- print("swappedtile2 "..tile2.gridX..","..tile2.gridY)
-            -- -- print(oldTile1.gridX..","..oldTile1.gridY)
-            -- -- print(oldTile2.gridX..","..oldTile2.gridY)
+            -- print(oldTile1.gridX..","..oldTile1.gridY)
+            -- print(oldTile2.gridX..","..oldTile2.gridY)
 
-            -- if self.board:calculateMatches() then
-            --     noMatch = false
-            -- end
+            if self.board:calculateMatches() then
+                noMatch = false
+            end
 
             -- -- revert the tiles back
             -- local tempX = oldTile1.gridX
