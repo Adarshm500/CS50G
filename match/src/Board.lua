@@ -55,7 +55,6 @@ end
 ]]
 function Board:calculateMatches()
     local matches = {}
-    print("checking..................")
 
     -- how many of the same color blocks in a row we've found
     local matchNum = 1
