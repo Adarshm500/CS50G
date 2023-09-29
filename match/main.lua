@@ -99,9 +99,7 @@ function love.keyboard.wasPressed(key)
 end
 
 function love.update(dt)
-    
-    some = 3
-    some2 = 9
+
     -- scroll background, used across all states
     backgroundX = backgroundX - BACKGROUND_SCROLL_SPEED * dt
     

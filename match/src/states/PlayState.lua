@@ -327,7 +327,7 @@ function PlayState:calculateMatches()
         -- add score for each match
         for k, match in pairs(matches) do
             self.score = self.score + #match * 50
-            self.timer = self.timer + 10
+            self.timer = self.timer + 1
         end
 
         -- remove any tiles that matched from the board, making empty spaces
@@ -371,6 +371,7 @@ function PlayState:swapTiles(tile1, tile2)
     return oldTile2
 end
 
+-- revert the tiles back without tweening them
 function PlayState:revertNoTween(oldTile1, oldTile2)
     -- revert the tiles back
     local tempX = oldTile1.gridX
