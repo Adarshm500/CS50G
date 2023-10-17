@@ -38,11 +38,20 @@ function Tile:render(x, y)
     
     -- draw tile itself
     if self.shiny  == 1 then
-        -- adding tint for shinytile
-        love.graphics.setColor(0.4, 0.4, 0.4, 1)
+
         love.graphics.draw(gTextures['main'], gFrames['tiles'][self.color][self.variety],
         self.x + x, self.y + y)
+        
+        -- adding tint for shinytile
+        love.graphics.setBlendMode('add')
+        love.graphics.setColor(1, 1, 1, 70/255)
+        love.graphics.rectangle('fill', (self.x + x) + 2,
+        (self.y + y) + 2, 16, 16, 4)
+        
+        -- back to alpha
+        love.graphics.setBlendMode('alpha')
     else
+        
         -- reset color
         love.graphics.setColor(1, 1, 1, 1)
         love.graphics.draw(gTextures['main'], gFrames['tiles'][self.color][self.variety],
