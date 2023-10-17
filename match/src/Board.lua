@@ -32,10 +32,21 @@ function Board:initializeTiles()
 
         for tileX = 1, 8 do
             if self.variety == 1 then
-                table.insert(self.tiles[tileY], Tile(tileX, tileY, math.random(8), 1))
+                -- create a new tile at X,Y with a random color and variety
+                if math.random(8) == 1 then
+                    print("initshinytile"..tileX..", "..tileY)
+                    table.insert(self.tiles[tileY], Tile(tileX, tileY, math.random(8), 1, 1)) -- shiny tile
+                else
+                table.insert(self.tiles[tileY], Tile(tileX, tileY, math.random(8), 1, 0))
+                end
             else
                 -- create a new tile at X,Y with a random color and variety
-                table.insert(self.tiles[tileY], Tile(tileX, tileY, math.random(8), math.random(6)))
+                if math.random(8) == 1 then
+                    print("initshinytile"..tileX..", "..tileY)
+                    table.insert(self.tiles[tileY], Tile(tileX, tileY, math.random(8), math.random(6), 1)) -- shiny tile
+                else
+                    table.insert(self.tiles[tileY], Tile(tileX, tileY, math.random(8), math.random(6), 0))
+                end
             end
         end
     end
@@ -81,12 +92,11 @@ function Board:calculateMatches()
                     local match = {}
 
                     -- if we have the shiny tile then the whole row should be cleared
-                    local shinyTile
-                    shinyTile = self.tiles[y][x - 1].variety 
-
+                    local shinyTile = 0
+                    
                     for i = x - 1,x - matchNum, -1 do
-                        if not (self.tiles[y][i].variety == shinyTile) then
-                            shinyTile = 0
+                        if self.tiles[y][i].shiny == 1 then
+                            shinyTile = 1
                         end
                     end
                     
@@ -125,12 +135,11 @@ function Board:calculateMatches()
             -- go backwards from end of last row by matchNum
 
             -- if we have te shiny tile then the whole row should be cleared
-            local shinyTile
-            shinyTile = self.tiles[y][8].variety
+            local shinyTile = 0
 
             for x = 8, 8 - matchNum + 1, -1 do
-                if not (self.tiles[y][x].variety == shinyTile) then
-                    shinyTile = 0
+                if self.tiles[y][x].shiny == 1 then
+                    shinyTile = 1
                 end
             end
             
@@ -146,6 +155,7 @@ function Board:calculateMatches()
                     table.insert(match, self.tiles[y][x])
                 end
             end
+            shinyTile = 0
             table.insert(matches, match)
         end
     end
@@ -167,12 +177,11 @@ function Board:calculateMatches()
                     local match = {}
 
                     -- if we have the shiny tile then the whole column should be cleared
-                    local shinyTile
-                    shinyTile = self.tiles[y - 1][x].variety
-
+                    local shinyTile = 0
+                    
                     for i = y - 1, y - matchNum, -1 do
-                        if not (self.tiles[i][x].variety == shinyTile) then
-                            shinyTile = 0
+                        if self.tiles[i][x].shiny == 1 then
+                            shinyTile = 1
                         end
                     end
                     
@@ -183,7 +192,6 @@ function Board:calculateMatches()
                             table.insert(match, self.tiles[y3][x])
                         end
                     else
-
                         for y2 = y - 1, y - matchNum, -1 do
                             table.insert(match, self.tiles[y2][x])
                         end
@@ -207,12 +215,11 @@ function Board:calculateMatches()
             local match = {}
 
              -- if we have te shiny tile then the whole row should be cleared
-            local shinyTile
-            shinyTile = self.tiles[8][x].variety
+            local shinyTile = 0
 
             for y = 8, 8 - matchNum + 1, -1 do
-                if not (self.tiles[y][x].variety == shinyTile) then
-                    shinyTile = 0
+                if self.tiles[y][x].shiny == 1 then
+                    shinyTile = 1
                 end
             end
             
@@ -223,13 +230,12 @@ function Board:calculateMatches()
                     table.insert(match, self.tiles[y3][x])
                 end
             else
-            
             -- go backwards from end of last row by matchNum
                 for y = 8, 8 - matchNum + 1, -1 do
                     table.insert(match, self.tiles[y][x])
                 end
             end
-
+            shinyTile = 0
             table.insert(matches, match)
         end
     end
@@ -322,12 +328,22 @@ function Board:getFallingTiles()
                 local tile
                 -- if the level is one then falling tiles must be plain
                 if self.variety == 1 then
-                    tile = Tile(x, y, math.random(8), 1)
+                    -- create a new tile at X,Y with a random color and variety
+                    if math.random(8) == 1 then
+                        tile = Tile(x, y, math.random(8), 1, 1) -- shiny tile
+                    else
+                        tile = Tile(x, y, math.random(8), 1, 0)
+                    end
                 else
-                    -- new tile with random color and variety
-                    tile = Tile(x, y, math.random(8), math.random(6))
+                    -- create a new tile with random color and variety
+                    if math.random(8) == 1 then
+                        print("spawnShinyTile"..x..", "..y)
+                        tile = Tile(x, y, math.random(8), math.random(6), 1) -- generate shiny tile here
+                    else
+                        tile = Tile(x, y, math.random(8), math.random(6), 0)
+                    end
                 end
-
+                
                 tile.y = -32
                 self.tiles[y][x] = tile
 
